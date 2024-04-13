@@ -6,7 +6,7 @@ namespace vehicleAPI.Services;
 public interface IVehicleService {
     Task<Vehicle> CreateVehicle(VehicleEntryRequest vehicleEntryRequest);
     Task<Vehicle> GetVehicle(int id);
-    Task<IEnumerable<Vehicle>> GetVehicles();
+    Task<IEnumerable<Vehicle>> GetVehicles(int page, int pageSize);
 }
 
 public class VehicleService : IVehicleService
@@ -37,8 +37,9 @@ public class VehicleService : IVehicleService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Vehicle>> GetVehicles()
+    public async Task<IEnumerable<Vehicle>> GetVehicles(int page, int pageSize)
     {
-        throw new NotImplementedException();
+        var vehicles = await _vehicleRepository.GetVehicles(page, pageSize);
+        return vehicles;
     }
 }

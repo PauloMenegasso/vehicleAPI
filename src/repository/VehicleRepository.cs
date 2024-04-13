@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using vehicleAPI.Domain;
 using vehicleAPI.Infra;
 
@@ -7,7 +8,7 @@ public interface IVehicleRepository
 {
     Task AddVehicle(Vehicle vehicle);
     Task<Vehicle> GetVehicle(int id);
-    Task<IEnumerable<Vehicle>> GetVehicles();
+    Task<IEnumerable<Vehicle>> GetVehicles(int page, int pageSize);
 }
 
 public class VehicleRepository : IVehicleRepository
@@ -29,8 +30,14 @@ public class VehicleRepository : IVehicleRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Vehicle>> GetVehicles()
+    public async Task<IEnumerable<Vehicle>> GetVehicles(int page = 1, int pageSize = 10)
     {
-        throw new NotImplementedException();
+        return await _context.Vehicles
+            .OrderBy(v => v.BrandId)
+                .ThenBy(v => v.Name)
+                .ThenByDescending(v => v.Year)
+            .Skip((page-1)*pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 }

@@ -15,8 +15,9 @@ public class VehicleController : ControllerBase {
     }
 
     [HttpGet]
-    public IActionResult Get() {
-        return Ok("Vehicle Controller");
+    public async Task<IActionResult> Get([FromQuery] int page, [FromQuery] int pageSize) {
+        var result = await _vehicleService.GetVehicles(page, pageSize);
+        return Ok(result);
     }
 
     [HttpPost]
